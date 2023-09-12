@@ -7,6 +7,29 @@ import java.util.*;
 public class hangMan {
 
 
+
+
+
+    public void inputLetter(){
+
+        Scanner inputLetter = new Scanner(System.in);
+        System.out.println("Введите букву русского алфавита: ");
+        String letter = inputLetter.nextLine().toLowerCase();
+      while(true){
+            if(!(1072 <= letter.charAt(0) && letter.charAt(0) <= 1103)){
+                System.out.println("Некорректная буква. Повторите ввод: ");
+                letter = inputLetter.nextLine().toLowerCase();
+            }else {
+                break;
+            }
+
+        }
+    }
+
+
+
+
+
     public void drowGame(){
 
         int counterErrors = 0;
@@ -14,10 +37,7 @@ public class hangMan {
         System.out.println(getGallow(counterErrors));
         System.out.println("Загаданное слово: " + unknownWord);
 
-
     }
-
-
 
 
 

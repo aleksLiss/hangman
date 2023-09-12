@@ -7,6 +7,7 @@ public class Main {
 //        System.out.println(w);
 //        man.drowGallow();
 //        System.out.println(man.drowGallow(7));
-        man.drowGame();
+//        man.drowGame();
+        man.inputLetter();
     }
 }
