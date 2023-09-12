@@ -1,39 +1,54 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 public class hangMan {
 
 
 
+
+
     public void gameLoop(){
 
         int counterErrors = 0;
-        String letter = inputLetter();
-        String word =  getWordFromStorage();
-        String unknownWord = getUnknownWord();
+        String [] words =  getWordFromStorage();
+        String word = words[0];
+        String unknownWord = words[1];
+        ArrayList<String> storageLetters = new ArrayList<>();
+        int counterRightsLetters = 0;
 
-        drowGame(counterErrors);
-        while(counterErrors != 6 || (!unknownWord.contains("_"))) {
-            if (word.contains(letter)) {
-                for (int i = 0; i < word.length(); i++) {
-                    if (word.charAt(i) == letter.charAt(0)) {
-                        unknownWord = unknownWord.replace(unknownWord.charAt(i), letter.charAt(0));
-                        System.out.println(unknownWord);
+
+        drowGallow(counterErrors);
+        System.out.println("Загаданное слово: " + unknownWord);
+        String letter = inputLetter();
+
+        while(counterErrors < 6 || (counterRightsLetters == words[0].length())) {
+            if(storageLetters.contains(letter)){
+                System.out.println("Вы уже загадывали эту букву. Повторите ввод: ");
+                letter = inputLetter();
+            }else {
+                if (word.contains(letter)) {
+                    char [] unknowWordArray = unknownWord.toCharArray();
+                    for(int i = 0; i < word.length(); i++){
+                        if(word.charAt(i) == letter.charAt(0)){
+                            unknowWordArray[i] = letter.charAt(0);
+                            counterRightsLetters++;
                     }
                 }
+                unknownWord = new String(unknowWordArray);
+                drowGallow(counterErrors);
+                System.out.println("Загаданное слово: " + unknownWord);
                 letter = inputLetter();
             } else {
+                storageLetters.add(letter);
                 counterErrors++;
-                drowGame(counterErrors);
+                drowGallow(counterErrors);
+                System.out.println("Загаданное слово: " + unknownWord);
+                letter = inputLetter();
+            }
             }
         }
+        System.out.println("Вы проиграли!\n" + "Загаданное слово: " + words[0]);
+        System.out.println("Хотите сыграть еще раз?");
     }
-
-
-
 
 
     public String inputLetter(){
@@ -42,7 +57,7 @@ public class hangMan {
         System.out.println("Введите букву русского алфавита: ");
         String letter = inputLetter.nextLine().toLowerCase();
         while(true){
-            if(!(1072 <= letter.charAt(0) && letter.charAt(0) <= 1103)){
+            if(!(1072 <= letter.charAt(0) && letter.charAt(0) <= 1103) || letter.length() > 1){
                 System.out.println("Некорректная буква. Повторите ввод: ");
                 letter = inputLetter.nextLine().toLowerCase();
             }else {
@@ -57,51 +72,31 @@ public class hangMan {
 
 
 
-    public void drowGame(Integer counterErrors){
-
-        String unknownWord = getUnknownWord();
+    public void drowGallow(Integer counterErrors){
         System.out.println(getGallow(counterErrors));
-        System.out.println("Загаданное слово: " + unknownWord);
-
     }
 
 
 
 
-    public ArrayList<String> setStorageWords(){
 
-      String words = "Толерантность, эксгумация, либерализм, экспонат," +
-                " пышность, скабрёзность, шаловливость, экспозиция, индульгенция," +
-                " контрацептив, шкворень, эпиграф, эпитафия, барбекю, жульен," +
-                " энцефалопатия, парашютист, импозантность, индифферент," +
-                " демультипликатор, педикулёз, выхухоль, россомаха," +
-                " сущность, поэтапность, напыщенность, возвышенность," +
-                " Кропотливость, гидрокарбонат, поясница," +
-                " болтушка, скарабей, калабалык, уныние, талия, стамеска, клозет";
 
-        ArrayList<String> storageWords = new ArrayList<>(Arrays.asList(words.split(", ")));
-        return storageWords;
-    }
-
-    public String getWordFromStorage(){
-
+    public String[] getWordFromStorage(){
         Random index = new Random();
+        String [] words = new String[2];
         int lastIndex = setStorageWords().size();
-        final String word = setStorageWords().get(index.nextInt(0, lastIndex)).toLowerCase();
-        return word;
-    }
-
-    public String getUnknownWord(){
-
-        String wordFromStorage = getWordFromStorage();
         String unknownWord = "";
 
-        for(int i = 0; i < wordFromStorage.length();i++){
+        String word = setStorageWords().get(index.nextInt(0, lastIndex)).toLowerCase();
+
+        for(int i = 0; i < word.length();i++){
             unknownWord += "_";
-            unknownWord += " ";
         }
-        return unknownWord;
+        words[0] = word;
+        words[1] = unknownWord;
+        return words;
     }
+
 
     public String getGallow(Integer number){
         return setGallow().get(number);
@@ -206,4 +201,20 @@ public class hangMan {
         return storageGallowsMap;
     }
 
+    public ArrayList<String> setStorageWords(){
+
+        String words = "Толерантность, эксгумация, либерализм, экспонат," +
+                " пышность, скабрёзность, шаловливость, экспозиция, индульгенция," +
+                " контрацептив, шкворень, эпиграф, эпитафия, барбекю, жульен," +
+                " энцефалопатия, парашютист, импозантность, индифферент," +
+                " демультипликатор, педикулёз, выхухоль, россомаха," +
+                " сущность, поэтапность, напыщенность, возвышенность," +
+                " Кропотливость, гидрокарбонат, поясница," +
+                " болтушка, скарабей, калабалык, уныние, талия, стамеска, клозет";
+
+        ArrayList<String> storageWords = new ArrayList<>(Arrays.asList(words.split(", ")));
+        return storageWords;
+    }
+
 }
+
