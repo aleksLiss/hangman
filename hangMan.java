@@ -8,14 +8,40 @@ public class hangMan {
 
 
 
+    public void gameLoop(){
+
+        int counterErrors = 0;
+        String letter = inputLetter();
+        String word =  getWordFromStorage();
+        String unknownWord = getUnknownWord();
+
+        drowGame(counterErrors);
+        while(counterErrors != 6 || (!unknownWord.contains("_"))) {
+            if (word.contains(letter)) {
+                for (int i = 0; i < word.length(); i++) {
+                    if (word.charAt(i) == letter.charAt(0)) {
+                        unknownWord = unknownWord.replace(unknownWord.charAt(i), letter.charAt(0));
+                        System.out.println(unknownWord);
+                    }
+                }
+                letter = inputLetter();
+            } else {
+                counterErrors++;
+                drowGame(counterErrors);
+            }
+        }
+    }
 
 
-    public void inputLetter(){
+
+
+
+    public String inputLetter(){
 
         Scanner inputLetter = new Scanner(System.in);
         System.out.println("Введите букву русского алфавита: ");
         String letter = inputLetter.nextLine().toLowerCase();
-      while(true){
+        while(true){
             if(!(1072 <= letter.charAt(0) && letter.charAt(0) <= 1103)){
                 System.out.println("Некорректная буква. Повторите ввод: ");
                 letter = inputLetter.nextLine().toLowerCase();
@@ -24,15 +50,15 @@ public class hangMan {
             }
 
         }
+        return letter;
     }
 
 
 
 
 
-    public void drowGame(){
+    public void drowGame(Integer counterErrors){
 
-        int counterErrors = 0;
         String unknownWord = getUnknownWord();
         System.out.println(getGallow(counterErrors));
         System.out.println("Загаданное слово: " + unknownWord);
@@ -61,8 +87,8 @@ public class hangMan {
 
         Random index = new Random();
         int lastIndex = setStorageWords().size();
-        String word = setStorageWords().get(index.nextInt(0, lastIndex));
-        return word.toLowerCase();
+        final String word = setStorageWords().get(index.nextInt(0, lastIndex)).toLowerCase();
+        return word;
     }
 
     public String getUnknownWord(){
@@ -72,6 +98,7 @@ public class hangMan {
 
         for(int i = 0; i < wordFromStorage.length();i++){
             unknownWord += "_";
+            unknownWord += " ";
         }
         return unknownWord;
     }
