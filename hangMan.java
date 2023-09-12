@@ -3,51 +3,57 @@ import java.util.*;
 public class hangMan {
 
 
+    public boolean repeatGame(){
+        Scanner answer = new Scanner(System.in);
+        System.out.println("Хотите сыграть еще раз?\n" + "Ответье да/нет: ");
+        if (answer.next().toLowerCase().equals("да")){
+            return true;
+        }else {
+            System.out.println("Увидимся....");
+            return false;
+        }
+    }
 
 
 
     public void gameLoop(){
+
+        setStorageWords();
 
         int counterErrors = 0;
         String [] words =  getWordFromStorage();
         String word = words[0];
         String unknownWord = words[1];
         ArrayList<String> storageLetters = new ArrayList<>();
-        int counterRightsLetters = 0;
 
-
-        drowGallow(counterErrors);
-        System.out.println("Загаданное слово: " + unknownWord);
-        String letter = inputLetter();
-
-        while(counterErrors < 6 || (counterRightsLetters == words[0].length())) {
+        while(counterErrors < 7 && !unknownWord.equals(word)) {
+            drowGallow(counterErrors);
+            System.out.println("Загаданное слово: " + unknownWord);
+            String letter = inputLetter();
             if(storageLetters.contains(letter)){
-                System.out.println("Вы уже загадывали эту букву. Повторите ввод: ");
-                letter = inputLetter();
+                System.out.println("Вы уже загадывали эту букву. Повторите ввод.");
             }else {
                 if (word.contains(letter)) {
                     char [] unknowWordArray = unknownWord.toCharArray();
                     for(int i = 0; i < word.length(); i++){
                         if(word.charAt(i) == letter.charAt(0)){
                             unknowWordArray[i] = letter.charAt(0);
-                            counterRightsLetters++;
                     }
                 }
                 unknownWord = new String(unknowWordArray);
-                drowGallow(counterErrors);
-                System.out.println("Загаданное слово: " + unknownWord);
-                letter = inputLetter();
             } else {
+                System.out.println("Такой буквы нет в слове!");
                 storageLetters.add(letter);
                 counterErrors++;
-                drowGallow(counterErrors);
-                System.out.println("Загаданное слово: " + unknownWord);
-                letter = inputLetter();
             }
             }
         }
+
+        if(unknownWord.equals(word)){
+            System.out.println("Вы выиграли!\n" + "Загаданное слово: " + words[0]);
+        }else if(counterErrors > 6){
         System.out.println("Вы проиграли!\n" + "Загаданное слово: " + words[0]);
-        System.out.println("Хотите сыграть еще раз?");
+    }
     }
 
 
@@ -55,11 +61,11 @@ public class hangMan {
 
         Scanner inputLetter = new Scanner(System.in);
         System.out.println("Введите букву русского алфавита: ");
-        String letter = inputLetter.nextLine().toLowerCase();
+        String letter = inputLetter.next().toLowerCase();
         while(true){
             if(!(1072 <= letter.charAt(0) && letter.charAt(0) <= 1103) || letter.length() > 1){
                 System.out.println("Некорректная буква. Повторите ввод: ");
-                letter = inputLetter.nextLine().toLowerCase();
+                letter = inputLetter.next().toLowerCase();
             }else {
                 break;
             }
