@@ -45,7 +45,7 @@ public class hangMan {
                 System.out.println("Такой буквы нет в слове!");
                 storageLetters.add(letter);
                 counterErrors++;
-            }
+                }
             }
         }
 
@@ -53,7 +53,7 @@ public class hangMan {
             System.out.println("Вы выиграли!\n" + "Загаданное слово: " + words[0]);
         }else if(counterErrors > 6){
         System.out.println("Вы проиграли!\n" + "Загаданное слово: " + words[0]);
-    }
+        }
     }
 
 
