@@ -4,8 +4,9 @@ public class Main {
         hangMan man = new hangMan();
         man.setStorageWords();
         String w = man.getWordFromStorage();
-        System.out.println(w);
+//        System.out.println(w);
 //        man.drowGallow();
-        System.out.println(man.drowGallow(7));
+//        System.out.println(man.drowGallow(7));
+        man.drowGame();
     }
 }
